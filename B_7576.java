@@ -13,18 +13,19 @@ class Pair{
 	}
 }
 
-public class B_7576 {
+public class B_7576_1 {
 	static int[][] tgarden;
+	static Queue<Pair> one;
 	public static void main(String args[]) {
 		Scanner sc = new Scanner(System.in);
 		int m,n;
-		
+
 		int answer;
 
 		m = Integer.parseInt(sc.next());
 		n = Integer.parseInt(sc.next());
 
-		LinkedList<Pair> one = new LinkedList<Pair>();
+		one = new LinkedList<Pair>();
 
 		//토마토 정보 받기. 
 		tgarden = new int[n][m];
@@ -34,17 +35,15 @@ public class B_7576 {
 			for(int j=0; j<m;j++) {
 				tgarden[i][j] = Integer.parseInt(sc.next());
 				if(tgarden[i][j]==1) {
-					one.add(new Pair(i,j));
+					one.offer(new Pair(i,j));
 				}
 			}
 		}
 
+		//Pair p = one.peek();
+		//one.poll();
+		bfs(n,m);
 
-		int tmp = one.size();
-		for(int k=0; k<tmp;k++) {
-			//1만 담겨있는 링크드 리스트에서 값을 꺼내서 bfs돌리기.
-			bfs(n,m,one.get(k).x,one.get(k).y);
-		}
 		answer=0;
 		for(int v1=0; v1<n; v1++) {
 			for(int v2=0;v2<m;v2++) {
@@ -63,14 +62,11 @@ public class B_7576 {
 			System.out.println(answer);			
 		}
 	}
-	public static void bfs(int m,int n,int here_x,int here_y){
-		Queue<Pair> q = new LinkedList<Pair>();
-		q.offer(new Pair(here_x,here_y));
-		//익힌거는 2로 바꿀까. 
-		//tgarden[here_x][here_y] =2;
-		while(!q.isEmpty()) {
-			Pair p = q.peek();
-			q.poll();
+	public static void bfs(int m,int n){
+		while(!one.isEmpty()) {
+			Pair p = one.peek();
+			//System.out.println("newX : "+p.x+" newY :"+p.y);
+			one.poll();
 			int newX=0;
 			int newY=0;			
 			for(int i=0; i<4;i++) {
@@ -100,7 +96,7 @@ public class B_7576 {
 						//익은 토마토로 바꿔주기.
 						tgarden[newX][newY] = tgarden[p.x][p.y]+1;
 						
-						q.offer(new Pair(newX,newY));
+						one.offer(new Pair(newX,newY));
 						//System.out.println("x : "+newX+" y: "+newY);
 					}
 				}
