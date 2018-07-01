@@ -1,6 +1,6 @@
 # 카카오 CodeFestival_본선_문제 4
-![KCF1_1](./kakao_CF1_1.png)(http://t1.kakaocdn.net/codefestival/problems.pdf)
-![KCF1_2](./kakao_CF1_2.png)(http://t1.kakaocdn.net/codefestival/problems.pdf)
+![KCF1_1](./kakao_CF1_1.png)
+![KCF1_2](./kakao_CF1_2.png)
 ![KCF1_3](./kakao_CF1_3.png)(http://t1.kakaocdn.net/codefestival/problems.pdf)
 
 ## 문제 접근
@@ -72,12 +72,12 @@ public static void dia(int nV,int start, int[] dist, int[][] ad) {
 `Priority Queue` 를 사용하여, 큐에 넣는 순간 `dist` 오름차순 정렬되도록 한다.<br>
 이를 위해, `compareTo` 메소드를 재정의 하여 사용하였다. <br>
 
-4방향 탐색이 진행되어야 하므로, `for` 문과 `switch` 문을 추가하여 각 케이스 별로 새로운 경로를 탐색하고 이 값이 이전 값보다 작을 경우 업데이트 해주었다. <br>
+4방향 탐색이 진행되어야 하므로, `for` 문과 `switch` 문을 추가하여 각 케이스 별로 새로운 경로를 탐색하고 이 값이 이전 값보다 작을 경우 업데이트 해주었다.
 
-<br>
 ## 유의해야 할 점.
-이 문제 역시 `newX` , `newY` 값이 범위를 초과하면 안된다.<br>
-m,n 을 초과하지 않는 지 검사하는 함수를 추가하고, 범위를 넘지 않을 경우만 다익스트라 알고리즘을 수행한다. <br>
+이 문제 역시 `newX` , `newY` 값이 범위를 초과하면 안된다. <br>
+m,n 을 초과하지 않는 지 검사하는 함수를 추가하고, 범위를 넘지 않을 경우만 다익스트라 알고리즘을 수행한다.
+
 ```Java
 ...
 if(!isRange(m,n,newX,newY)) continue;
@@ -91,10 +91,10 @@ private static boolean isRange(int m, int n, int x, int y) {
 	return 0<=x && x<m && 0<=y && y<n;
 }
 ```
-<br>
-<br>
-탐색이 끝난 후, 문제에 지정된 시간 `s` 를 넘지 않으면서 거리가 최소가 되는 값을 찾아야 한다. <br>
-`PrirorityQueue` 를 사용 하였으므로, s를 넘지않는 최초 값이 최소값임이 보장 된다. <br>
+
+탐색이 끝난 후, 문제에 지정된 시간 `s`  를 넘지 않으면서 거리가 최소가 되는 값을 찾아야 한다.  
+`PrirorityQueue` 를 사용 하였으므로, s 를 넘지않는 최초 값이 최소값임이 보장 된다. <br>
+
 ```Java
 for(int k=0; k< n*m; k++) {
 	if(dist[k][m-1][n-1] > s) continue;
