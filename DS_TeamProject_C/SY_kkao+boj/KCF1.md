@@ -110,4 +110,4 @@ return answer;
 
 최종 코드는 아래와 같다. <br>
 (너무 길어서 우선 링크로 거는데,, 보고서에 full code를 넣을지 상의 해보죠.) <br>
-[acmicpc_note/DS/SY_kkao+boj/KCF1.java](url)
+[acmicpc_note/DS_TeamProject_C/SY_kkao+boj/KCF1.java](url)
