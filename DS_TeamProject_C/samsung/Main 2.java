@@ -89,15 +89,7 @@ class Main {
 			Queue_Data now = q.pop();
 			amount = now.ans;
 			index = now.index;
-//			System.out.println(numbers[index]);
-//			System.out.println(index);
-//			System.out.println(now.ans);
-//			System.out.println(now.plus);
-//			System.out.println(now.min);
-//			System.out.println(now.mul);
-//			System.out.println(now.div);
 			
-
 			if (index == N) {
 				max = Integer.max(max, amount);
 				min = Integer.min(min, amount);
