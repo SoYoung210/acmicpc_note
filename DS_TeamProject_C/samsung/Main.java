@@ -23,6 +23,7 @@ class Main {
             this.x = x;
             this.y = y;
         }
+        Point() {} 
     }
      
     static class Queue_Data {
@@ -32,8 +33,8 @@ class Main {
          
          
         Queue_Data(Point R, Point B, int count) {
-            this.R = new Point(R.x, R.y);
-            this.B = new Point(B.x, B.y);
+            this.R = R;
+            this.B = B;
             this.count = count;
         }
     }
