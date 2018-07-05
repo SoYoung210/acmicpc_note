@@ -47,7 +47,7 @@ class Main {
 		System.out.println(min);
 		
 
-		bfs(1, numbers[0]);		
+		dfs2(1, numbers[0]);		
 
 	}
 
@@ -80,8 +80,7 @@ class Main {
 		}
 	}
 
-	public static void bfs(int index, int amount) { 
-		//근데 이 방법도 dfs 인듯 하다. 결국 스택에 저장해서 스택 값을 읽는 것이기 때문이다. 
+	public static void dfs2(int index, int amount) { 
 		Stack<Queue_Data> q = new Stack<Queue_Data>();
 		q.add(new Queue_Data(numbers[0], index, operation[0], operation[1], operation[2], operation[3]));
 
