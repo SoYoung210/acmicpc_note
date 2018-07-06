@@ -39,7 +39,7 @@ public class Kruskal {
 	
 	
 	private static void Kruskal (PriorityQueue<Element> q) {
-		//q에 대해서 1. 가중치가 제일 적은 것을뽑는다. 2.만약에 같은 부모노드를 가지고 있으면 union을 해준다.3. 그 후 update를 해준다. 
+		
 		
 		while(!q.isEmpty()) {
 			if (find(q.peek().v1) != find(q.peek().v2)) {
