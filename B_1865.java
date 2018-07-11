@@ -29,7 +29,7 @@ class Edge {
 
 public class B_1865 {
 
-	public static ArrayList<Edge> g = new ArrayList<Edge>();
+	public static List<Edge> g = new ArrayList<Edge>();
 	public static final int INF = Integer.MAX_VALUE;
 
 	public static void main(String[] args) {
@@ -37,11 +37,10 @@ public class B_1865 {
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			int test = Integer.parseInt(br.readLine());
 			String[] answer = new String[test];
-			int i,j,k;
+			int i;
 			
 			for(i=0;i<test;i++) {
-				boolean minus = false;
-
+				System.out.println("===test===");
 				String[] nmw = br.readLine().split(" ");
 				
 				int n = Integer.parseInt(nmw[0]); //3
@@ -50,73 +49,54 @@ public class B_1865 {
 				int[] dist = new int[n+1];
 				Arrays.fill(dist,INF);
 				// 2 3 4
-				for(j=2;j<=m+1;j++) {
+
+				for (i = 1; i <= m; i++) { 
 					String[] set = br.readLine().split(" ");
 			
 					int s1 = Integer.parseInt(set[0]);
 					int e1 = Integer.parseInt(set[1]);
 					int t1 = Integer.parseInt(set[2]);
 
-					Edge e = new Edge(s1,e1,t1);
-					Edge ee = new Edge(e1,s1,t1);
-					if(g.contains(e)) {
-						int index = g.indexOf(e);
-						if(t1 < g.get(index).weight()) {
-							g.remove(index);
-							g.add(e);
-						}else {
-							e = null;
-						}
-					}else {
-						g.add(e);
-					}
-					if(g.contains(ee)) {
-						int index = g.indexOf(ee);
-						if(t1 < g.get(index).weight()) {
-							g.remove(index);
-							g.add(ee);
-						}else {
-							ee = null;
-						}
-					}else {
-						g.add(ee);
-					}				
-				}
-				// 5 
-				for(j=m+2;j<=m+w+1;j++) {
+					g.add(new Edge(s1,e1,t1));
+					g.add(new Edge(e1,s1,t1));
+				} 
+				for (i = 1; i <= w; i++) { 
 					String[] set2 = br.readLine().split(" ");
 
 					int s2 = Integer.parseInt(set2[0]);
 					int e2 = Integer.parseInt(set2[1]);
 					int t2 = Integer.parseInt(set2[2]);	
-					g.add(new Edge(s2,e2,t2*(-1)));			
-				}
-				dist[1] = 0;
-				for(k=1;k<=n;k++) {
-					boolean updated = false;
-					//모든 정보를 순회.
-					for(Edge e : g) {
-						if(dist[e.start()]!=INF && dist[e.dest()] > dist[e.start()] + e.weight()) {
-							dist[e.dest()] = dist[e.start()] + e.weight();
-							updated = true;
-						}
-					}
-					if(!updated) { //System.out.println("NO");
-						minus = false;
-						break;
-					}
-					if(k == n-1) {
-						minus = true;
-					}				
-				}
+					g.add(new Edge(s2,e2,t2*(-1)));	
+				}				
+				
+				boolean minus = BellmanFord(dist,g,n,(m+w),1);
 				System.out.println( (minus) ? "YES" : "NO" );
+				g.clear();
 			}
+			System.out.println("===out===");
 		}catch(IOException ex) {
+			System.out.println("===error===");
 			ex.printStackTrace();
 		}
-		/*
-		for(int a=0; a<test; a++) {
-			System.out.println(answer[a]);
-		}*/
+	}
+	public static boolean BellmanFord(int[] dist, List<Edge> edge, int V, int E, int StartNode) { 
+		boolean hasMinusCycle = false; 
+
+		dist[1] = 0;
+		dist[StartNode] = 0; 
+		for(int i = 1; i <= V; i++) { 
+			for(Edge nowEdge : edge) { 
+				int from = nowEdge.start(); 
+				int to = nowEdge.dest(); 
+				int weight = nowEdge.weight(); 
+				if(dist[from] == INF) 
+					continue; 
+				if(dist[to] > dist[from] + weight) { 
+					dist[to] = dist[from] + weight; 
+					if(i == V) hasMinusCycle = true; 
+				} 
+			} 
+		} 
+		return hasMinusCycle; 
 	}
 }
