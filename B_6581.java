@@ -8,13 +8,14 @@ public class B_6581 {
 		//sb.length() 가능. sb.append("xyz") 형태. stringBuilderObj.setLength(0) 가능.
 		StringBuilder sb = new StringBuilder();
 		String tmp = br.readLine();
+		if(tmp.length() == 0)
+			return;
 		String word;
 		int index;
 		int eightCount = 0;
 
 
-		while(tmp!=null) {
-			System.out.println("tmp:"+tmp);
+		while(!tmp.equals("0")) {
 			String[] token = tmp.split(" ");
 
 			int wordcount = token.length;
@@ -22,15 +23,17 @@ public class B_6581 {
 				word = token[index];
 				if(word.equals("<hr>")) {
 					if(eightCount !=0) {
+						sb.deleteCharAt(sb.length()-1);
 						sb.append("\n");
 						eightCount = 0;
 					}
 					sb.append("--------------------------------------------------------------------------------\n");
 				}else if(word.equals("<br>")) {
-					if(sb.charAt(sb.length()-1)!='\n') {
-						sb.append("\n");
-						eightCount = 0;
-					}
+					if(sb.charAt(sb.length()-1)!='\n')
+						sb.deleteCharAt(sb.length()-1);
+					sb.append("\n");
+					eightCount = 0;
+
 				}else if(word.equals("")) {
 					continue;
 				}else {
@@ -41,32 +44,18 @@ public class B_6581 {
 						eightCount = token[index].length();
 					}
 					sb.append(word);
-				}
-				if(eightCount<80 && eightCount!=0) {
-					sb.append(" ");
-					eightCount++;
+					if(eightCount<80 && eightCount!=0) {
+						sb.append(" ");
+						eightCount++;
+					}					
 				}
 			}
 			tmp = br.readLine();
 
 		}
-		bw.write(sb.toString().trim());
+		String answer = sb.toString();
+		bw.write(answer.substring(0,answer.length() - 1));
 		bw.close();
 		br.close();
 	}
 }
-/*
-Hallo, dies ist eine 
-ziemlich lange Zeile, die in Html
-aber nicht umgebrochen wird.
-<br>
-Zwei <br> <br> produzieren zwei Newlines. 
-Es gibt auch noch das tag <hr> was einen Trenner darstellt.
-Zwei <hr> <hr> produzieren zwei Horizontal Rulers.
-Achtung       mehrere Leerzeichen irritieren
-
-Html genauso wenig wie
-
-
-mehrere Leerzeilen.
-*/
