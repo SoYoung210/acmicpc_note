@@ -18,7 +18,7 @@ public class B_9237 {
 		int tmp;
 		for(i=1;i<=count;i++) {
 			tmp = tree.poll()+i;
-			max = (max < tmp) ? tmp : max;
+			max = Math.max(tmp,max);
 		}
 		System.out.println(max+1);
 	}
