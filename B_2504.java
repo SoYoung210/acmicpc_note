@@ -10,7 +10,7 @@ public class B_2504 {
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			char[] chArr = br.readLine().toCharArray();
 			int chLeng = chArr.length;
-			if(chLeng == 0 || chLeng == 1) {System.out.println("0"); return;}
+			if(chLeng % 2 !=0) {System.out.println("0"); return;}
 			int i;
 
 			int answer = 0;
