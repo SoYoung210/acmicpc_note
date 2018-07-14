@@ -68,9 +68,9 @@ public static void dia(int nV,int start, int[] dist, int[][] ad) {
 	}
 }
 ```
-<br>
-`Priority Queue` 를 사용하여, 큐에 넣는 순간 `dist` 오름차순 정렬되도록 한다.<br>
-이를 위해, `compareTo` 메소드를 재정의 하여 사용하였다. <br>
+
+`Priority Queue` 를 사용하여, 큐에 넣는 순간 `dist` 오름차순 정렬되도록 한다.  
+이를 위해, `compareTo` 메소드를 재정의 하여 사용하였다.  
 
 4방향 탐색이 진행되어야 하므로, `for` 문과 `switch` 문을 추가하여 각 케이스 별로 새로운 경로를 탐색하고 이 값이 이전 값보다 작을 경우 업데이트 해주었다.
 
@@ -110,4 +110,5 @@ return answer;
 
 최종 코드는 아래와 같다. <br>
 (너무 길어서 우선 링크로 거는데,, 보고서에 full code를 넣을지 상의 해보죠.) <br>
-[acmicpc_note/DS/SY_kkao+boj/KCF1.java](url)
+
+[acmicpc_note/DS_TeamProject_C/SY_kkao+boj/KCF1.java](url)
