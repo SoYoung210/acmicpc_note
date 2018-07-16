@@ -18,9 +18,9 @@ public class B_2504 {
 			for(i=0; i < chLeng; i++) {
 				//stackOp call
 				if(chArr[i] == ')') {
-					stackOp(2,')');
+					if(!stackOp(2,')')) return;
 				}else if(chArr[i] == ']') {
-					stackOp(3,']');
+					stackOp(3,']'); return;
 				}else {
 					s.push(Character.toString(chArr[i]));
 				}				
@@ -35,10 +35,10 @@ public class B_2504 {
 			}
 			System.out.println(answer);
 		}catch(IOException ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 	}
-	public static void stackOp(int op,char bracket) {
+	private static boolean stackOp(int op,char bracket) {
 		int sum = 0;
 		String tmp;
 		String tmp2;
@@ -46,39 +46,34 @@ public class B_2504 {
 
 		try {
 			tmp = s.pop();
-			//System.out.println("tmp : "+tmp);
 			if(isInteger(tmp)) {
 				sum += Integer.parseInt(tmp);
-				try {
-					second = s.peek();
-					if(isInteger(second)) {
-						tmp2 = s.peek();
-						while(isInteger(tmp2)) {
-							s.pop();
-							sum += Integer.parseInt(tmp2);
-							tmp2 = s.peek();
-						}
-						s.pop();
-						s.push(Integer.toString(sum*op));
-					}else {
-						if(bracket == ')') {
-							if(s.pop().charAt(0) == '(') {
-								s.push(Integer.toString(Integer.parseInt(tmp)*op));
-							}else {
-								System.out.println("0"); System.exit(0);
-							}
-						}else {		
-							if(s.pop().charAt(0) == '[') {
-								s.push(Integer.toString(Integer.parseInt(tmp)*op));
-							}else {
-								System.out.println("0"); System.exit(0);
-							}
-						}
-						
-					}
 
-				}catch(Exception e) {
-					//System.out.println("0"); return;
+				second = s.peek();
+				if(isInteger(second)) {
+					tmp2 = s.peek();
+					while(isInteger(tmp2)) {
+						s.pop();
+						sum += Integer.parseInt(tmp2);
+						tmp2 = s.peek();
+					}
+					s.pop();
+					s.push(Integer.toString(sum*op));
+				}else {
+					if(bracket == ')') {
+						if(s.pop().charAt(0) == '(') {
+							s.push(Integer.toString(Integer.parseInt(tmp)*op));
+						}else {
+							System.out.println("0"); return false;
+						}
+					}else {		
+						if(s.pop().charAt(0) == '[') {
+							s.push(Integer.toString(Integer.parseInt(tmp)*op));
+						}else {
+							System.out.println("0"); return false;
+						}
+					}
+					
 				}
 			}else {
 				if(bracket == ')') {
@@ -86,21 +81,23 @@ public class B_2504 {
 						s.push("2");
 					}
 					else {
-						System.out.println("0"); System.exit(0);
+						System.out.println("0"); return false;
 					}
 				}else {
 					if(tmp.charAt(0) == '[') {
 						s.push("3");
 					}
 					else{
-						System.out.println("0"); System.exit(0);
+						System.out.println("0"); return false;
 					}
 				}
 				//s.push( (bracket=='(') ? '2' : '3' );
 			}
 		}catch(EmptyStackException ex) {
-			//System.out.println("0"); return;
+			//ex.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 	public static boolean isInteger(String s) {
 	    try { 
