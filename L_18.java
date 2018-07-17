@@ -9,7 +9,6 @@ public class L_18 {
     	List<List<Integer>> result = new ArrayList<>();
     	//파라미터로 넘어온 값은 copy해서 사용.
         int[] c_nums = nums;
-
         Arrays.sort(c_nums);
         int i,j,small_index,large_index;
 
@@ -44,5 +43,6 @@ public class L_18 {
         	}
         }
         return result;
+
     }	
 }
