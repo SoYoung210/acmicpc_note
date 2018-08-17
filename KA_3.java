@@ -20,7 +20,7 @@ public class KA_3 {
 			//정해진 시간 언제넘나 하는 진짜 정답 저장할 배열 진짜진짜 최종...
 			int[] answerTime = new int[n+1];
 			int i;
-			for(i=0; i<n; i++) {
+			for(i=0; i<=n; i++) {
 				songTree.add(new ArrayList<Integer>());
 			}
 			//dummy
@@ -45,30 +45,51 @@ public class KA_3 {
 				int time = Integer.parseInt(tmp[0]);
 				int s = Integer.parseInt(tmp[2]);
 				int NodeNumber = Integer.parseInt(tmp[1]);
-
+				boolean aloneFlag = false;
 				int divScore;
-
+				int howManySong;
+				int middleScore;
 				int[] tmpSingerScore = new int[n+1];
 				if(songTree.get(NodeNumber).size() != 0) {
-					divScore = s / songTree.get(NodeNumber).size();
-					tmpSingerScore = new int[songTree.get(NodeNumber).size()];
+					divScore = s / ( songTree.get(NodeNumber).size() +1 );
 				}else {
+					aloneFlag = true;
 					divScore = s;
+				}
+
+				if(aloneFlag) {
+					howManySong = countSinger(singerInfo[NodeNumber]);
+					//System.out.println("NodeNumber : "+singerInfo[NodeNumber]);
+					middleScore = divScore / howManySong;
+
+					if(!finalScore.containsKey(singerInfo[NodeNumber])) {
+						finalScore.put(singerInfo[NodeNumber],middleScore);
+					}else {
+						finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+middleScore);
+					}
+					//System.out.println("3. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+					if(finalScore.get(singerInfo[NodeNumber]) > j && answerTime[singerInfo[NodeNumber]] == 0) {
+						//System.out.println("2. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+						answerTime[singerInfo[NodeNumber]] = time;
+					}					
 				}
 
 				for(int node : songTree.get(NodeNumber)) {
 					tmpSingerScore[singerInfo[node]] += divScore;
+					//System.out.println("1. tmpSingerScore[singerInfo[node]] :"+tmpSingerScore[singerInfo[node]]+"divScore : "+ divScore);
 				}
 				for(int node : songTree.get(NodeNumber)) {
-					int howManySong = countSinger(singerInfo[node]);
-					int middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
+					howManySong = countSinger(singerInfo[node]);
+					middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
 
-					if(finalScore.containsKey(node)) {
+					if(!finalScore.containsKey(node)) {
 						finalScore.put(singerInfo[node],middleScore);
 					}else {
 						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+middleScore);
 					}
-					if(finalScore.get(singerInfo[node]) > j) {
+					//System.out.println("1. singer :"+singerInfo[node]+"score : "+ finalScore.get(singerInfo[node]));
+					if(finalScore.get(singerInfo[node]) > j &&  answerTime[singerInfo[node]] == 0) {
+						//System.out.println("singer :"+singerInfo[node]+"score : "+ finalScore.get(singerInfo[node]));
 						answerTime[singerInfo[node]] = time;
 					}
 				}
@@ -77,8 +98,8 @@ public class KA_3 {
 
 			//정답 출력
 			for(i=1; i<=n; i++) {
-				if(answerTime[i]!=0) {
-					System.out.println(answerTime[i]);
+				if(answerTime[singerInfo[i]]!=0) {
+					System.out.println(answerTime[singerInfo[i]]);
 				}else {
 					System.out.println("-1");
 				}
@@ -89,9 +110,6 @@ public class KA_3 {
 		}
 	}
 	public static int countSinger(int singer) {
-		//ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(arr));
-		//ArrayList<Integer> asList = new ArrayList<Integer>(Arrays.asList(singerInfo));
-		//HashSet<Integer> mySet = new HashSet<Integer>(asList);
 		int count = 0;
 		for(int s: singerInfo) {
 			if(singer == s) count++;
