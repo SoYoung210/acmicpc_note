@@ -16,6 +16,9 @@ public class KA_3 {
 			songTree = new ArrayList<>();
 			//가수별 점수 정리 Map<가수,점수> 형태.
 			finalScore = new HashMap<>();
+
+			//정해진 시간 언제넘나 하는 진짜 정답 저장할 배열 진짜진짜 최종...
+			int[] answerTime = new int[n+1];
 			int i;
 			for(i=0; i<n; i++) {
 				songTree.add(new ArrayList<Integer>());
@@ -33,7 +36,7 @@ public class KA_3 {
 			tmp = br.readLine().split(" ");
 			for(i=1;i<=n;i++) {
 				//1번곡은 1번가수가, 2번곡은 1번가수가, 3번곡은 3번가수가.. 이런 정보.
-				singerInfo[i] = tmp[i-1];
+				singerInfo[i] = Integer.parseInt(tmp[i-1]);
 			}
 
 			for(i=1;i<=k;i++) {
@@ -45,7 +48,7 @@ public class KA_3 {
 
 				int divScore;
 
-				int[] tmpSingerScore;
+				int[] tmpSingerScore = new int[n+1];
 				if(songTree.get(NodeNumber).size() != 0) {
 					divScore = s / songTree.get(NodeNumber).size();
 					tmpSingerScore = new int[songTree.get(NodeNumber).size()];
@@ -57,26 +60,40 @@ public class KA_3 {
 					tmpSingerScore[singerInfo[node]] += divScore;
 				}
 				for(int node : songTree.get(NodeNumber)) {
-					int howManySong = countSinger(node);
+					int howManySong = countSinger(singerInfo[node]);
 					int middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
 
 					if(finalScore.containsKey(node)) {
-						finalScore.put(node,middleScore);
+						finalScore.put(singerInfo[node],middleScore);
 					}else {
-						finalScore.put(node, finalScore.get(node)+middleScore);
+						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+middleScore);
+					}
+					if(finalScore.get(singerInfo[node]) > j) {
+						answerTime[singerInfo[node]] = time;
 					}
 				}
 
 			}
+
+			//정답 출력
+			for(i=1; i<=n; i++) {
+				if(answerTime[i]!=0) {
+					System.out.println(answerTime[i]);
+				}else {
+					System.out.println("-1");
+				}
+			}
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	public static int countSinger(int singer) {
-		List asList = Arrays.asList(singerInfo);
-		Set<Integer> mySet = new HashSet<Integer>(asList);
-		int count;
-		for(int s: mySet) {
+		//ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(arr));
+		//ArrayList<Integer> asList = new ArrayList<Integer>(Arrays.asList(singerInfo));
+		//HashSet<Integer> mySet = new HashSet<Integer>(asList);
+		int count = 0;
+		for(int s: singerInfo) {
 			if(singer == s) count++;
 		}
 		return count;
