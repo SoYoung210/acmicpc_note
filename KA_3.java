@@ -3,103 +3,82 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class KA_3 {
+	static ArrayList<ArrayList<Integer>> songTree;
+	static Map<Integer, Integer> finalScore;
+	static int[] singerInfo;
 	public static void main (String[] args) {
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			String[] tmp = br.readLine().split(" ");
 			int n = Integer.parseInt(tmp[0]);
 			int k = Integer.parseInt(tmp[1]);
 			int j = Integer.parseInt(tmp[2]);
-
-
-			Map<Integer, Integer> answer = new HashMap<>();
-			List <ArrayList<Integer>> g = new ArrayList<ArrayList<Integer>> ();
-			int[] print_answer = new int[n+1];
-
-
+			//곡 트리 
+			songTree = new ArrayList<>();
+			//가수별 점수 정리 Map<가수,점수> 형태.
+			finalScore = new HashMap<>();
 			int i;
-			for(i=0; i<n+1; i++) {
-				g.add(new ArrayList<Integer>());
+			for(i=0; i<n; i++) {
+				songTree.add(new ArrayList<Integer>());
 			}
-			g.get(0).add(0);
+			//dummy
+			songTree.get(0).add(0);
 
-			String[] song_root = br.readLine().split(" ");
-
-			for(i=0;i<n-1; i++) {
-				g.get(Integer.parseInt(song_root[i])).add(i+2);
-			} 
-			String[] singer_info = br.readLine().split(" ");
-
-			List<Integer> singer = new ArrayList<>();
-			int[] arr_singer = new int[n+1];
-			singer.add(0);
-			int[] singer_score = new int[n+1];
-
-			for(i=1; i<=n; i++) {
-				singer.add(Integer.parseInt(singer_info[i-1]));
-				arr_singer[i] = Integer.parseInt(singer_info[i-1]);
+			tmp = br.readLine().split(" ");
+			//부모 노드 설정.
+			for(i=2;i<=n;i++) {
+				songTree.get(Integer.parseInt(tmp[i-2])).add(i);
+			}
+			//해당곡을 부른 가수의 정보 ... 
+			singerInfo = new int[n+1];
+			tmp = br.readLine().split(" ");
+			for(i=1;i<=n;i++) {
+				//1번곡은 1번가수가, 2번곡은 1번가수가, 3번곡은 3번가수가.. 이런 정보.
+				singerInfo[i] = tmp[i-1];
 			}
 
-			for(i=0; i<k; i++) {
+			for(i=1;i<=k;i++) {
+				tmp = br.readLine().split(" ");
+				//tmp[0] = time, tmp[1] = rootNodeNumber(song), tmp[2] = score
+				int time = Integer.parseInt(tmp[0]);
+				int s = Integer.parseInt(tmp[2]);
+				int NodeNumber = Integer.parseInt(tmp[1]);
 
-				String[] test_algo = br.readLine().split(" ");
-				//t 도 저장을 해야겟네 ...
-				int time = Integer.parseInt(test_algo[0]);
-				int p = Integer.parseInt(test_algo[1]);
-				int s = Integer.parseInt(test_algo[2]);
+				int divScore;
 
-				if(g.get(p).size() != 0)
-					singer_score[p] = s/(g.get(p).size()+1);
-				else
-					singer_score[p] = s;
-
-				Map<Integer, Integer> count_score = new HashMap<>();
-
-				int mean_score = s/(g.get(p).size()+1);
-				
-				for(int a : g.get(p)) {
-					
-					singer_score[arr_singer[a]] = s/(g.get(p).size()+1);
-					//System.out.println("singer :"+arr_singer[a]+"  singer_score[a] :"+singer_score[a]);
+				int[] tmpSingerScore;
+				if(songTree.get(NodeNumber).size() != 0) {
+					divScore = s / songTree.get(NodeNumber).size();
+					tmpSingerScore = new int[songTree.get(NodeNumber).size()];
+				}else {
+					divScore = s;
 				}
-				for(int b=1; b<=n; b++) {
-					//System.out.println("arr_singer[b] : "+arr_singer[b]);
-					if(count_score.containsKey( arr_singer[b] )) {
-						//System.out.println("contains ");
-						count_score.put(arr_singer[b],  count_score.get(arr_singer[b]) + singer_score[arr_singer[b]]);
-						System.out.println("contains "+count_score.get(arr_singer[b]));
+
+				for(int node : songTree.get(NodeNumber)) {
+					tmpSingerScore[singerInfo[node]] += divScore;
+				}
+				for(int node : songTree.get(NodeNumber)) {
+					int howManySong = countSinger(node);
+					int middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
+
+					if(finalScore.containsKey(node)) {
+						finalScore.put(node,middleScore);
 					}else {
-						count_score.put(arr_singer[b], singer_score[arr_singer[b]]);
+						finalScore.put(node, finalScore.get(node)+middleScore);
 					}
 				}
 
-				for(int key : count_score.keySet()) {
-					System.out.println("key : "+key);
-					int tmp_score = count_score.get(key) / Collections.frequency(singer, key);
-					System.out.println("tmp_score : "+tmp_score);
-					if(answer.containsKey(key)) {
-						answer.put( key, answer.get(key) + tmp_score);
-						System.out.println("answer "+answer.get(key));
-					}else {
-						answer.put( key, tmp_score);
-					}
-					if(answer.get(key) > j) {
-						for(int t=1; t<=n; t++) {
-							if(arr_singer[t] == key) {
-								print_answer[t] = time;
-							}
-						}
-					}
-				}
-				count_score.clear();
 			}
-				for(i=1; i<=n; i++) {
-					if(print_answer[i] !=0)
-						System.out.println(print_answer[i]);
-					else
-						System.out.println("-1");
-				}			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static int countSinger(int singer) {
+		List asList = Arrays.asList(singerInfo);
+		Set<Integer> mySet = new HashSet<Integer>(asList);
+		int count;
+		for(int s: mySet) {
+			if(singer == s) count++;
+		}
+		return count;
 	}
 }
