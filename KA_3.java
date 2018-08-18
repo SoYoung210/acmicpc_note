@@ -59,7 +59,10 @@ public class KA_3 {
 
 				if(aloneFlag) {
 					howManySong = countSinger(singerInfo[NodeNumber]);
-					//System.out.println("NodeNumber : "+singerInfo[NodeNumber]);
+
+
+					//divide by zero...?
+					//if(howManySong == 0) howManySong = 1;
 					middleScore = divScore / howManySong;
 
 					if(!finalScore.containsKey(singerInfo[NodeNumber])) {
@@ -71,15 +74,34 @@ public class KA_3 {
 					if(finalScore.get(singerInfo[NodeNumber]) > j && answerTime[singerInfo[NodeNumber]] == 0) {
 						//System.out.println("2. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
 						answerTime[singerInfo[NodeNumber]] = time;
-					}					
+					}
+					continue;				
+				}
+
+				// root node 에 대해 계산되지 않는 로직이라 보완함.. 
+
+				tmpSingerScore[singerInfo[NodeNumber]] += divScore;
+				for(int node : songTree.get(NodeNumber)) {
+					tmpSingerScore[singerInfo[node]] += divScore;
+				}
+
+				// root node 에 대해 계산되지 않는 로직이라 보완함.. 2
+				howManySong = countSinger(singerInfo[NodeNumber]);
+				middleScore = tmpSingerScore[singerInfo[NodeNumber]] / howManySong;
+				if(!finalScore.containsKey(NodeNumber)) {
+						finalScore.put(singerInfo[NodeNumber],middleScore);
+				}else {
+					finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+middleScore);
+				}
+				//System.out.println("1. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+				if(finalScore.get(singerInfo[NodeNumber]) > j &&  answerTime[singerInfo[NodeNumber]] == 0) {
+					//System.out.println("singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+					answerTime[singerInfo[NodeNumber]] = time;
 				}
 
 				for(int node : songTree.get(NodeNumber)) {
-					tmpSingerScore[singerInfo[node]] += divScore;
-					//System.out.println("1. tmpSingerScore[singerInfo[node]] :"+tmpSingerScore[singerInfo[node]]+"divScore : "+ divScore);
-				}
-				for(int node : songTree.get(NodeNumber)) {
 					howManySong = countSinger(singerInfo[node]);
+
 					middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
 
 					if(!finalScore.containsKey(node)) {
@@ -87,9 +109,7 @@ public class KA_3 {
 					}else {
 						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+middleScore);
 					}
-					//System.out.println("1. singer :"+singerInfo[node]+"score : "+ finalScore.get(singerInfo[node]));
 					if(finalScore.get(singerInfo[node]) > j &&  answerTime[singerInfo[node]] == 0) {
-						//System.out.println("singer :"+singerInfo[node]+"score : "+ finalScore.get(singerInfo[node]));
 						answerTime[singerInfo[node]] = time;
 					}
 				}
