@@ -2,6 +2,38 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+
+class RecoAlgo implements Comparable<RecoAlgo>{
+	public int time;
+	public int rootNodeNumber;
+	public int score;
+
+	RecoAlgo(int time, int rootNodeNumber, int score) {
+		this.time = time;
+		this.rootNodeNumber = rootNodeNumber;
+		this.score = score;
+	}
+	public int getTime() {
+		return this.time;
+	}
+	public int getRootNodeNumber() {
+		return this.rootNodeNumber;
+	}
+	public int getScore() {
+		return this.score;
+	}
+	@Override
+	public int compareTo(RecoAlgo o){
+		if(this.score<o.score) {
+			return -1;
+		}else if(this.score > o.score) {
+			return 1;
+		}else {
+			return 0;
+		}
+    }
+}
+
 public class KA_3 {
 	static ArrayList<ArrayList<Integer>> songTree;
 	static Map<Integer, Long> finalScore;
@@ -16,7 +48,8 @@ public class KA_3 {
 			songTree = new ArrayList<>();
 			//가수별 점수 정리 Map<가수,점수> 형태.
 			finalScore = new HashMap<>();
-
+			//추천알고리즘 시간순으로 정렬받을 자료구조 .
+			PriorityQueue<RecoAlgo> q = new PriorityQueue<RecoAlgo> ();
 			//정해진 시간 언제넘나 하는 진짜 정답 저장할 배열 진짜진짜 최종...
 			int[] answerTime = new int[n+1];
 			int i;
@@ -38,68 +71,77 @@ public class KA_3 {
 				//1번곡은 1번가수가, 2번곡은 1번가수가, 3번곡은 3번가수가.. 이런 정보.
 				singerInfo[i] = Integer.parseInt(tmp[i-1]);
 			}
-
-			for(i=1;i<=k;i++) {
+			for(i=1; i<=k; i++) {
 				tmp = br.readLine().split(" ");
-				//tmp[0] = time, tmp[1] = rootNodeNumber(song), tmp[2] = score
 				int time = Integer.parseInt(tmp[0]);
-				int s = Integer.parseInt(tmp[2]);
-				int NodeNumber = Integer.parseInt(tmp[1]);
+				int score = Integer.parseInt(tmp[2]);
+				int nodeNumber = Integer.parseInt(tmp[1]);
+
+				q.offer(new RecoAlgo(time,nodeNumber,score));				
+			}
+			while(!q.isEmpty()) {
+				
+				RecoAlgo r = q.poll();
+
+				int T = r.getTime();
+				int P = r.getRootNodeNumber();
+				int S = r.getScore();
+
 				boolean aloneFlag = false;
 				int divScore;
 				int howManySong;
 				int middleScore;
 				int[] tmpSingerScore = new int[n+1];
-				if(songTree.get(NodeNumber).size() != 0) {
-					divScore = s / ( songTree.get(NodeNumber).size() +1 );
+				if(songTree.get(P).size() != 0) {
+					divScore = S / ( songTree.get(P).size() +1 );
 				}else {
 					aloneFlag = true;
-					divScore = s;
+					divScore = S;
 				}
 
 				if(aloneFlag) {
-					howManySong = countSinger(singerInfo[NodeNumber]);
+					howManySong = countSinger(singerInfo[P]);
 
 
 					//divide by zero...?
 					//if(howManySong == 0) howManySong = 1;
 					middleScore = divScore / howManySong;
 
-					if(!finalScore.containsKey(singerInfo[NodeNumber])) {
-						finalScore.put(singerInfo[NodeNumber],Long.valueOf(middleScore));
+					if(!finalScore.containsKey(singerInfo[P])) {
+						finalScore.put(singerInfo[P],Long.valueOf(middleScore));
 					}else {
-						finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+Long.valueOf(middleScore));
+						finalScore.put(singerInfo[P], finalScore.get(singerInfo[P])+Long.valueOf(middleScore));
 					}
 					//System.out.println("3. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
-					if(finalScore.get(singerInfo[NodeNumber]) > j && answerTime[singerInfo[NodeNumber]] == 0) {
+					if(finalScore.get(singerInfo[P]) > j && answerTime[singerInfo[P]] == 0) {
 						//System.out.println("2. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
-						answerTime[singerInfo[NodeNumber]] = time;
+						answerTime[singerInfo[P]] = T;
 					}
 					continue;				
 				}
 
 				// root node 에 대해 계산되지 않는 로직이라 보완함.. 
 
-				tmpSingerScore[singerInfo[NodeNumber]] += divScore;
-				for(int node : songTree.get(NodeNumber)) {
+				tmpSingerScore[singerInfo[P]] += divScore;
+				for(int node : songTree.get(P)) {
 					tmpSingerScore[singerInfo[node]] += divScore;
 				}
 
 				// root node 에 대해 계산되지 않는 로직이라 보완함.. 2
-				howManySong = countSinger(singerInfo[NodeNumber]);
-				middleScore = tmpSingerScore[singerInfo[NodeNumber]] / howManySong;
-				if(!finalScore.containsKey(NodeNumber)) {
-						finalScore.put(singerInfo[NodeNumber],Long.valueOf(middleScore));
+				howManySong = countSinger(singerInfo[P]);
+				middleScore = tmpSingerScore[singerInfo[P]] / howManySong;
+				if(!finalScore.containsKey(P)) {
+					finalScore.put(singerInfo[P],Long.valueOf(middleScore));
 				}else {
-					finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+Long.valueOf(middleScore));
+					finalScore.put(singerInfo[P], finalScore.get(singerInfo[P])+Long.valueOf(middleScore));
 				}
 				//System.out.println("1. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
-				if(finalScore.get(singerInfo[NodeNumber]) > j &&  answerTime[singerInfo[NodeNumber]] == 0) {
+				if(finalScore.get(singerInfo[P]) > j &&  answerTime[singerInfo[P]] == 0) {
 					//System.out.println("singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
-					answerTime[singerInfo[NodeNumber]] = time;
+					answerTime[singerInfo[P]] = T;
 				}
 
-				for(int node : songTree.get(NodeNumber)) {
+				for(int node : songTree.get(P)) {
 					howManySong = countSinger(singerInfo[node]);
 
 					middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
@@ -110,7 +152,7 @@ public class KA_3 {
 						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+Long.valueOf(middleScore));
 					}
 					if(finalScore.get(singerInfo[node]) > j &&  answerTime[singerInfo[node]] == 0) {
-						answerTime[singerInfo[node]] = time;
+						answerTime[singerInfo[node]] = T;
 					}
 				}
 
