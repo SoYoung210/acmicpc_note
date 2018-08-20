@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 
 public class KA_3 {
 	static ArrayList<ArrayList<Integer>> songTree;
-	static Map<Integer, Integer> finalScore;
+	static Map<Integer, Long> finalScore;
 	static int[] singerInfo;
 	public static void main (String[] args) {
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
@@ -66,9 +66,9 @@ public class KA_3 {
 					middleScore = divScore / howManySong;
 
 					if(!finalScore.containsKey(singerInfo[NodeNumber])) {
-						finalScore.put(singerInfo[NodeNumber],middleScore);
+						finalScore.put(singerInfo[NodeNumber],Long.valueOf(middleScore));
 					}else {
-						finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+middleScore);
+						finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+Long.valueOf(middleScore));
 					}
 					//System.out.println("3. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
 					if(finalScore.get(singerInfo[NodeNumber]) > j && answerTime[singerInfo[NodeNumber]] == 0) {
@@ -89,9 +89,9 @@ public class KA_3 {
 				howManySong = countSinger(singerInfo[NodeNumber]);
 				middleScore = tmpSingerScore[singerInfo[NodeNumber]] / howManySong;
 				if(!finalScore.containsKey(NodeNumber)) {
-						finalScore.put(singerInfo[NodeNumber],middleScore);
+						finalScore.put(singerInfo[NodeNumber],Long.valueOf(middleScore));
 				}else {
-					finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+middleScore);
+					finalScore.put(singerInfo[NodeNumber], finalScore.get(singerInfo[NodeNumber])+Long.valueOf(middleScore));
 				}
 				//System.out.println("1. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
 				if(finalScore.get(singerInfo[NodeNumber]) > j &&  answerTime[singerInfo[NodeNumber]] == 0) {
@@ -105,9 +105,9 @@ public class KA_3 {
 					middleScore = tmpSingerScore[singerInfo[node]]/howManySong;
 
 					if(!finalScore.containsKey(node)) {
-						finalScore.put(singerInfo[node],middleScore);
+						finalScore.put(singerInfo[node],Long.valueOf(middleScore));
 					}else {
-						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+middleScore);
+						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+Long.valueOf(middleScore));
 					}
 					if(finalScore.get(singerInfo[node]) > j &&  answerTime[singerInfo[node]] == 0) {
 						answerTime[singerInfo[node]] = time;
@@ -126,7 +126,8 @@ public class KA_3 {
 			}
 
 		}catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("-1");
+			//e.printStackTrace();
 		}
 	}
 	public static int countSinger(int singer) {
