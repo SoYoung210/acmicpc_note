@@ -56,14 +56,47 @@ public class L_200 {
         for(i=0; i<hang; i++) {
         	for(j=0; j<yul; j++) {
         		if(grid[i][j] == '1') {
-        			bfs(i,j,hang,yul,grid);
+        			dfs(i,j,hang,yul,grid);
         			count++;
         		}
         	}
         }
         return count;
     }
-
+	public static void dfs(int here_x,int here_y,int m, int n, char[][] grid){
+		visited[here_x][here_y] = false;
+		grid[here_x][here_y] = '3';
+		//4 directions search.
+		int newX=0;
+		int newY=0;
+		for(int i=0; i<4;i++) {
+			switch(i){
+				case 0:
+					newX = here_x;
+					newY = here_y -1;
+					break;
+				case 1:
+					newX = here_x+1;
+					newY = here_y;
+					break;
+				case 2:
+					newX = here_x;
+					newY = here_y+1;
+					break;
+				case 3:
+					newX = here_x-1;
+					newY = here_y;
+					break;
+			}
+			if(newX>=0 && newY>=0 && newX<=m-1 && newY<=n-1) {
+				if(grid[newX][newY]=='1'&&visited[newX][newY]==false) {
+					visited[newX][newY] = true;
+					dfs(newX,newY,m,n,grid);
+				}
+			}
+		}		
+	}    
+/*
 	public static void bfs(int here_x,int here_y,int m, int n, char[][] grid) {
 		Queue<Pair> q = new LinkedList<Pair>();
 		visited[here_x][here_y] = false; // 발견표시.
@@ -111,5 +144,5 @@ public class L_200 {
 				}
 			}
 		}
-	}
+	}*/
 }
