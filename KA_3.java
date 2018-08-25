@@ -4,9 +4,9 @@ import java.io.InputStreamReader;
 
 
 class RecoAlgo implements Comparable<RecoAlgo>{
-	public int time;
-	public int rootNodeNumber;
-	public int score;
+	private int time;
+	private int rootNodeNumber;
+	private int score;
 
 	RecoAlgo(int time, int rootNodeNumber, int score) {
 		this.time = time;
@@ -24,15 +24,16 @@ class RecoAlgo implements Comparable<RecoAlgo>{
 	}
 	@Override
 	public int compareTo(RecoAlgo o){
-		if(this.score<o.score) {
+		if(this.time<o.time) {
 			return -1;
-		}else if(this.score > o.score) {
+		}else if(this.time > o.time) {
 			return 1;
 		}else {
 			return 0;
 		}
     }
 }
+
 
 public class KA_3 {
 	static ArrayList<ArrayList<Integer>> songTree;
@@ -101,8 +102,6 @@ public class KA_3 {
 
 				if(aloneFlag) {
 					howManySong = countSinger(singerInfo[P]);
-
-
 					//divide by zero...?
 					//if(howManySong == 0) howManySong = 1;
 					middleScore = divScore / howManySong;
@@ -112,9 +111,8 @@ public class KA_3 {
 					}else {
 						finalScore.put(singerInfo[P], finalScore.get(singerInfo[P])+Long.valueOf(middleScore));
 					}
-					//System.out.println("3. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
 					if(finalScore.get(singerInfo[P]) > j && answerTime[singerInfo[P]] == 0) {
-						//System.out.println("2. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+						finalScore.put(singerInfo[P] , -1L);
 						answerTime[singerInfo[P]] = T;
 					}
 					continue;				
@@ -135,9 +133,9 @@ public class KA_3 {
 				}else {
 					finalScore.put(singerInfo[P], finalScore.get(singerInfo[P])+Long.valueOf(middleScore));
 				}
-				//System.out.println("1. singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+
 				if(finalScore.get(singerInfo[P]) > j &&  answerTime[singerInfo[P]] == 0) {
-					//System.out.println("singer :"+singerInfo[NodeNumber]+"score : "+ finalScore.get(singerInfo[NodeNumber]));
+					finalScore.put(singerInfo[P] , -1L);
 					answerTime[singerInfo[P]] = T;
 				}
 
@@ -152,6 +150,8 @@ public class KA_3 {
 						finalScore.put(singerInfo[node], finalScore.get(singerInfo[node])+Long.valueOf(middleScore));
 					}
 					if(finalScore.get(singerInfo[node]) > j &&  answerTime[singerInfo[node]] == 0) {
+						//overflow 방지.
+						finalScore.put(singerInfo[node] , -1L);
 						answerTime[singerInfo[node]] = T;
 					}
 				}
@@ -168,8 +168,8 @@ public class KA_3 {
 			}
 
 		}catch(Exception e) {
-			System.out.println("-1");
-			//e.printStackTrace();
+			//System.out.println("-1");
+			e.printStackTrace();
 		}
 	}
 	public static int countSinger(int singer) {
