@@ -74,9 +74,9 @@ public class KA_3 {
 			}
 			for(i=1; i<=k; i++) {
 				tmp = br.readLine().split(" ");
-				int time = Integer.parseInt(tmp[0]);
-				int score = Integer.parseInt(tmp[2]);
-				int nodeNumber = Integer.parseInt(tmp[1]);
+				long time = Integer.parseInt(tmp[0]);
+				long score = Integer.parseInt(tmp[2]);
+				long nodeNumber = Integer.parseInt(tmp[1]);
 
 				q.offer(new RecoAlgo(time,nodeNumber,score));				
 			}
@@ -84,15 +84,15 @@ public class KA_3 {
 				
 				RecoAlgo r = q.poll();
 
-				int T = r.getTime();
-				int P = r.getRootNodeNumber();
-				int S = r.getScore();
+				long T = r.getTime();
+				long P = r.getRootNodeNumber();
+				long S = r.getScore();
 
 				boolean aloneFlag = false;
-				int divScore;
-				int howManySong;
-				int middleScore;
-				int[] tmpSingerScore = new int[n+1];
+				long divScore;
+				long howManySong;
+				long middleScore;
+				long[] tmpSingerScore = new long[n+1];
 				if(songTree.get(P).size() != 0) {
 					divScore = S / ( songTree.get(P).size() +1 );
 				}else {
