@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class L_299 {
-	static Map<Character, ArrayList<Integer>> guessMap = new HashMap<>();  
+	static Map<Character, ArrayList<Integer>> guessMap = new HashMap<>();   
 	public static void main(String[] args) {
 		//System.out.println(getHint("1807","7810"));
 		//System.out.println(getHint("1123","0111"));
