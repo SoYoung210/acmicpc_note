@@ -5,7 +5,7 @@ class Element implements Comparable<Element> {
 	public int frequent;
 
 	Element(int number, int frequent) {
-		this.number = number;
+		this.number = number; 
 		this.frequent = frequent;
 	}
 
